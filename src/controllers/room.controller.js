@@ -21,14 +21,14 @@ const createRoom = async (req, res) => {
       .child(chatroomId)
       .once("value", function (snapshot) {
         if (snapshot.exists()) {
-          res.send(snapshot.val());
+          res.send({chatroomID:chatroomId,data:snapshot.val()});
         } else {
           ref.child("Chatroom").child(chatroomId).set(chatroom);
           ref
             .child("Chatroom")
             .child(chatroomId)
             .once("value", function (snapshot) {
-              res.send(snapshot.val());
+              res.send({chatroomID:chatroomId,data:snapshot.val()});
             });
         }
       });
