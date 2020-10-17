@@ -7,7 +7,7 @@ admin.initializeApp({
     type: "service_account",
     project_id: "anonymouspace-bc341",
     private_key_id: process.env.private_key_id,
-    private_key: process.env.private_key,
+    private_key: process.env.private_key.replace(/\\n/g, "\n"),
     client_email:
       "firebase-adminsdk-sdqz9@anonymouspace-bc341.iam.gserviceaccount.com",
     client_id: "106309187996855080331",
