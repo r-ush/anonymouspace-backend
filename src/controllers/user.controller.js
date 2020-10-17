@@ -33,6 +33,16 @@ const userAccount=async (req,res)=>
     });
 }
 
+const sendUser= async (req,res)=>
+{
+    var uuid=req.body.uuid;
+    ref.child("Users").child(uuid).on("value", function(snapshot)
+    {
+        var data=snapshot.val();
+        res.send(data);
+    });
+}
+
 module.exports={
-    sendAllData, userAccount
+    sendAllData, userAccount, sendUser
 }
