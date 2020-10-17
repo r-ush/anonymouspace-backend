@@ -32,41 +32,65 @@ const userAccount=async (req,res)=>
     var displayName=shortName;
     var randomimage=req.body.randomimage;
 
-    ref.child("Users").child(uuid).on("value", function(snapshot)
+    try
     {
-        if (snapshot.exists())
+        ref.child("Users").child(uuid).on("value", function(snapshot)
         {
-            res.send(snapshot.val());
-        }
-        else
-        {
-            ref.child("Users").child(uuid).set({
-                chatcount,firstName,location,screenTime,displayName, randomimage
-            });
-        }
-    });
+            if (snapshot.exists())
+            {
+                res.send(snapshot.val());
+            }
+            else
+            {
+                ref.child("Users").child(uuid).set({
+                    chatcount,firstName,location,screenTime,displayName, randomimage
+                });
+            }
+        });
+    
+    }
+    catch(e)
+    {
+        res.send("error");
+    }
+
 }
 
 const sendUser= async (req,res)=>
 {
-    var uuid=req.body.uuid;
-    ref.child("Users").child(uuid).on("value", function(snapshot)
+    try
     {
-        var data=snapshot.val();
-        res.send(data);
-    });
+        var uuid=req.body.uuid;
+        ref.child("Users").child(uuid).on("value", function(snapshot)
+        {
+            var data=snapshot.val();
+            res.send(data);
+        });            
+    }
+    catch(e)
+    {
+        res.send("error");
+    }
 }
 
 const updateScreenTime = async (req,res)=>
 {
-    var uuid=req.body.uuid;
-    var screenTime=req.body.screenTime;
+    try
+    {
+        var uuid=req.body.uuid;
+        var screenTime=req.body.screenTime;
+    
+        //change to adding with previous value instead of just updating
+        ref.child("Users").child(uuid).update({
+            "screenTime":screenTime
+        })    
+    }
+    catch(e)
+    {
+        res.send("error");
+    }
+    
 
-    //change to adding with previous value instead of just updating
-    ref.child("Users").child(uuid).update({
-        "screenTime":screenTime
-    })
-    res.send("success");
 }
 
 module.exports={
