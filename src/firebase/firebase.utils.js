@@ -8,8 +8,10 @@ admin.initializeApp({
 });
 
 var db = admin.database();
+var ref=db.ref("/");
 
 module.exports = {
   db,
   admin,
+  ref
 };
