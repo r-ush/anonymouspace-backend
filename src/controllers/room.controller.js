@@ -1,3 +1,4 @@
+const { response } = require("express");
 const { v4: uuidv4 } = require("uuid");
 const { ref } = require("../firebase/firebase.utils");
 
@@ -29,17 +30,52 @@ const createRoom = async (req, res) => {
       });
   } catch (err) {
     console.log(err);
+    res.send({
+      message: false,
+      err,
+    });
   }
 };
 
 const joinRoom = async (req, res) => {
   const { userId, chatroomId } = req.body;
   //append it to users in chat room by userid
-  res.send({ message: true });
+  try {
+    ref
+      .child("Chatroom")
+      .child(chatroomId)
+      .child("users")
+      .update({
+        [userId]: true,
+      });
+    res.send({ message: true });
+  } catch (err) {
+    console.log(err);
+    res.send({
+      message: false,
+      err,
+    });
+  }
 };
 
 const leaveUser = (req, res) => {
   const { userId, chatroomId } = req.body;
+  try {
+    ref
+      .child("Chatroom")
+      .child(chatroomId)
+      .child("users")
+      .update({
+        [userId]: false,
+      });
+    res.send({ message: true });
+  } catch (err) {
+    console.log(err);
+    res.send({
+      message: false,
+      err,
+    });
+  }
   // user false
   // check if room empty
   // add user count -1 to all users in room
