@@ -27,7 +27,7 @@ const userAccount=(req,res)=>
     var chatcount=0;
     var screenTime=0;
     try
-    {        
+    {
         var { uuid, firstName="namenotgiven", location="notgiven", randomimage="urlnotgiven"}=req.body;
         var displayName=shortName;
     
@@ -59,7 +59,7 @@ const sendUser= (req,res)=>
 {
     try
     {
-        const {uuid}=req.body;
+        const {uuid="nonegiven"}=req.body;
         ref.child("Users").child(uuid).on("value", function(snapshot)
         {
             var data=snapshot.val();
@@ -76,7 +76,7 @@ const updateScreenTime = (req,res)=>
 {
     try
     {
-        const {uuid, screenTime }=req.body;
+        const {uuid="nonegiven", screenTime=0 }=req.body;
         var finalTime;
 
         var data;
@@ -92,9 +92,7 @@ const updateScreenTime = (req,res)=>
             ref.child("Users").child(uuid).update({
                 "screenTime":finalTime
             });
-    
         });
-
         res.status(200).send("success");
     }
     catch(e)
