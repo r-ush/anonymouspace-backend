@@ -8,6 +8,7 @@ admin.initializeApp({
 });
 
 var db = admin.database();
+var ref = db.ref("/");
 
 var ref = db.ref("/");
 
