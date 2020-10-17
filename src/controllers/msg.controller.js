@@ -1,4 +1,5 @@
 const express=require('express')
+const rot = require('rot');
 const {ref}=require("../firebase/firebase.utils");
 const Filter = require('bad-words'),
 
@@ -8,16 +9,17 @@ const sendMessage= async (req,res)=>
 {
     const { msg="nomsgsent", chatroomid="nonegiven", uuid="nonegiven" }= req.body;
     var timestamp=Date.now();
-
     try
     {
         var filteredmsg=filter.clean(msg);
+        var encrypedmsg=rot(filteredmsg, process.env.rotkey);
+
         ref.child("Chatroom").child(chatroomid).once("value", function(snapshot)
         {
             if (snapshot.exists())
             {
                 ref.child("Chatroom").child(chatroomid).child("messages").child(timestamp).update({
-                    "content":filteredmsg,
+                    "content":encrypedmsg,
                     "userid":uuid,
                     timestamp
                 });
