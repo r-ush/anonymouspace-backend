@@ -48,6 +48,7 @@ const updateScreenTime = async (req,res)=>
     var uuid=req.body.uuid;
     var screenTime=req.body.screenTime;
 
+    //change to adding with previous value instead of just updating
     ref.child("Users").child(uuid).update({
         "screenTime":screenTime
     })
