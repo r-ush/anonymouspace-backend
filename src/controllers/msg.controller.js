@@ -27,9 +27,10 @@ const sendMessage= async (req,res)=>
     }
     catch(e)
     {
-        res.status(400).send("error");
+        console.log(e);
+        res.status(400).send({message:false,err});
     }
-}
+};
 
 
 module.exports={

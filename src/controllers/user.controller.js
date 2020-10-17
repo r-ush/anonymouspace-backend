@@ -8,7 +8,7 @@ const shortName = uniqueNamesGenerator({
   length: 2
 });
 
-const sendAllData= async (req,res)=>{
+const sendAllData= (req,res)=>{
     try
     {
         ref.once("value", function(snapshot) {
@@ -22,16 +22,16 @@ const sendAllData= async (req,res)=>{
     }
 }
 
-const userAccount=async (req,res)=>
+const userAccount=(req,res)=>
 {
-    const { uuid, firstName, location, randomimage}=req.body;
     var chatcount=0;
     var screenTime=0;
-    var displayName=shortName;
-
     try
-    {
-        ref.child("Users").child(uuid).on("value", function(snapshot)
+    {        
+        var { uuid, firstName="namenotgiven", location="notgiven", randomimage="urlnotgiven"}=req.body;
+        var displayName=shortName;
+    
+        ref.child("Users").child(uuid).once("value", function(snapshot)
         {
             if (snapshot.exists())
             {
@@ -42,18 +42,20 @@ const userAccount=async (req,res)=>
                 ref.child("Users").child(uuid).set({
                     chatcount,firstName,location,screenTime,displayName, randomimage
                 });
+                ref.child("Users").child(uuid).once("value", function(snapshot)
+                {
+                    res.status(200).send(snapshot.val());
+                });
             }
         });
-    
     }
     catch(e)
     {
         res.status(400).send("error");
     }
-
 }
 
-const sendUser= async (req,res)=>
+const sendUser= (req,res)=>
 {
     try
     {
@@ -70,11 +72,19 @@ const sendUser= async (req,res)=>
     }
 }
 
-const updateScreenTime = async (req,res)=>
+const updateScreenTime = (req,res)=>
 {
     try
     {
         const {uuid, screenTime }=req.body;
+
+        var data;
+
+        ref.child("Users").child(uuid).once("value", function(snapshot)
+        {
+            data=snapshot.val().screenTime;
+            // console.log(data.screenTime);
+        }).then((lol)=>console.log(lol.val().screenTime));
     
         //change to adding with previous value instead of just updating
         ref.child("Users").child(uuid).update({
