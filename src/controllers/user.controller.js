@@ -24,13 +24,10 @@ const sendAllData= async (req,res)=>{
 
 const userAccount=async (req,res)=>
 {
-    var uuid=req.body.uuid;
+    const { uuid, firstName, location, randomimage}=req.body;
     var chatcount=0;
-    var firstName=req.body.firstName;
-    var location=req.body.location;
     var screenTime=0;
     var displayName=shortName;
-    var randomimage=req.body.randomimage;
 
     try
     {
@@ -60,7 +57,7 @@ const sendUser= async (req,res)=>
 {
     try
     {
-        var uuid=req.body.uuid;
+        const {uuid}=req.body;
         ref.child("Users").child(uuid).on("value", function(snapshot)
         {
             var data=snapshot.val();
@@ -77,8 +74,7 @@ const updateScreenTime = async (req,res)=>
 {
     try
     {
-        var uuid=req.body.uuid;
-        var screenTime=req.body.screenTime;
+        const {uuid, screenTime }=req.body;
     
         //change to adding with previous value instead of just updating
         ref.child("Users").child(uuid).update({
