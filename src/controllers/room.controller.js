@@ -70,66 +70,58 @@ const leaveUser = (req, res) => {
       .child("Chatroom")
       .child(chatroomId)
       .child("users")
-      .update({
+      .set({
         [userId]: false,
       });
-    res.send({ message: true });
-  } catch (err) {
-    console.log(err);
-    res.send({
-      message: false,
-      err,
-    });
-  }
-  // check if room empty
-  try {
     ref
-      .child("Chatroom")
-      .child(chatroomId)
-      .child("users")
-      .once("value", function (snapshot) {
-        var usersInRoom = snapshot.val();
-        console.log(usersInRoom);
-        if (Object.keys(usersInRoom).every((k) => !usersInRoom[k])) {
-          // room is empty
-          usersInRoom = Object.keys(usersInRoom);
-          console.log("room is empty");
-          // add user count -1 to all users in room
-          interactionCount = usersInRoom.length - 1;
-          console.log(interactionCount);
-          usersInRoom.forEach((user) => {
-            try {
-              ref
-                .child("Users")
-                .child(user)
-                .once("value", function (snapshot) {
-                  var data = snapshot.val();
-                  console.log(data);
+    .child("Chatroom")
+    .child(chatroomId)
+    .child("users")
+    .once("value", function (snapshot) {
+      var usersInRoom = snapshot.val();
+      if (Object.keys(usersInRoom).every((k) => !usersInRoom[k])) {
+        // room is empty
+        usersInRoom = Object.keys(usersInRoom);
+        // add user count -1 to all users in room
+        interactionCount = usersInRoom.length - 1;
+        usersInRoom.forEach((user) => {
+          try {
+            ref
+              .child("Users")
+              .child(user)
+              .once("value", function (snapshot) {
+                var data = snapshot.val();
+                if(data)
+                {
                   newChatCount = data.chatCount + interactionCount;
-                  console.log(newChatCount);
-                  try {
-                    ref.child("Users").child(user).update({
-                      chatCount: newChatCount,
-                    });
-                  } catch (err) {
-                    console.log(err);
-                    res.send({
-                      message: false,
-                      err,
-                    });
-                  }
-                });
-            } catch (err) {
-              console.log(err);
-              res.send({
-                message: false,
-                err,
+                }
+                else
+                {
+                  newChatCount = interactionCount;
+                }
+                try {
+                  ref.child("Users").child(user).update({
+                    chatCount: newChatCount,
+                  });
+                } catch (err) {
+                  console.log(err);
+                  res.send({
+                    message: false,
+                    err,
+                  });
+                }
               });
-            }
-          });
-          res.send({ message: true });
-        }
-      });
+          } catch (err) {
+            console.log(err);
+            res.send({
+              message: false,
+              err,
+            });
+          }
+        });
+        res.send({ message: true });
+      }
+    });
   } catch (err) {
     console.log(err);
     res.send({
