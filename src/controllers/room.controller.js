@@ -61,6 +61,7 @@ const joinRoom = async (req, res) => {
 const leaveUser = (req, res) => {
   const { userId, chatroomId } = req.body;
   try {
+    // user false
     ref
       .child("Chatroom")
       .child(chatroomId)
@@ -76,9 +77,22 @@ const leaveUser = (req, res) => {
       err,
     });
   }
-  // user false
   // check if room empty
-  // add user count -1 to all users in room
+  ref
+    .child("Chatroom")
+    .child(chatroomId)
+    .child("users")
+    .once("value", function (snapshot) {
+      var usersInRoom = snapshot.val();
+      console.log(usersInRoom);
+      if (Object.keys(usersInRoom).every((k) => !usersInRoom[k])) {
+        // room is empty
+        console.log("room is empty");
+        // add user count -1 to all users in room
+        interactionCount = Object.keys(usersInRoom).length - 1;
+        console.log(interactionCount);
+      }
+    });
 };
 
 module.exports = {
