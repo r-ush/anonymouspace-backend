@@ -7,7 +7,13 @@ filter = new Filter();
  
 const sendMessage= async (req,res)=>
 {
-    const { msg="nomsgsent", chatroomid="nonegiven", uuid="nonegiven" }= req.body;
+    const { 
+        msg="nomsgsent",
+        chatroomid="nonegiven",
+        uuid="nonegiven",
+        displayName="nonegiven"
+
+    }= req.body;
     var timestamp=Date.now();
     try
     {
@@ -21,6 +27,7 @@ const sendMessage= async (req,res)=>
                 ref.child("Chatroom").child(chatroomid).child("messages").child(timestamp).update({
                     "content":encrypedmsg,
                     "userid":uuid,
+                    "displayname":displayName,
                     timestamp
                 });
                 res.status(200).send({message:true});

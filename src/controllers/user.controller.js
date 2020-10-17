@@ -31,7 +31,7 @@ const userAccount = (req, res) => {
       uuid = "nouuidgiven",
       firstName = "namenotgiven",
       location = "notgiven",
-      randomimage = "urlnotgiven",
+      randomimage = "urlnotgiven"
     } = req.body;
     var displayName = shortName;
 
