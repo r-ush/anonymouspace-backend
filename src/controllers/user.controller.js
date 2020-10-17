@@ -43,6 +43,26 @@ const sendUser= async (req,res)=>
     });
 }
 
+const updateScreenTime= async (req,res)=>
+{
+    var uuid=req.body.uuid;
+    var screenTime=req.body.screenTime;
+
+    //fix the if else statement
+    if(ref.child("Users").child(uuid))
+    {
+        ref.child("Users").child(uuid).update({
+            "screenTime":screenTime
+        })
+        res.send("success");
+    }
+    else
+    {
+        res.send("no user");
+
+    }
+}
+
 module.exports={
-    sendAllData, userAccount, sendUser
+    sendAllData, userAccount, sendUser, updateScreenTime
 }
