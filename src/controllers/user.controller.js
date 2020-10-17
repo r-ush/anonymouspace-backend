@@ -92,7 +92,6 @@ const updateScreenTime = (req, res) => {
         data = snapshot.val().screenTime;
       })
       .then((lol) => {
-        console.log(lol.val().screenTime);
         finalTime = lol.val().screenTime + screenTime;
         console.log(finalTime);
         ref.child("Users").child(uuid).update({
