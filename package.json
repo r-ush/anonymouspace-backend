@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/r-ush/anonymouspace-backend#readme",
   "dependencies": {
+    "bad-words": "^3.0.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "firebase-admin": "^8.11.0",
