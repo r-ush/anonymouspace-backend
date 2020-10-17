@@ -9,11 +9,17 @@ const shortName = uniqueNamesGenerator({
 });
 
 const sendAllData= async (req,res)=>{
-    ref.
-    once("value", function(snapshot) {
-        const data = snapshot.val();
-        res.send(data);
-    })
+    try
+    {
+        ref.once("value", function(snapshot) {
+            const data = snapshot.val();
+            res.send(data);
+        })    
+    }
+    catch(e)
+    {
+        res.send("error")        
+    }
 }
 
 const userAccount=async (req,res)=>
