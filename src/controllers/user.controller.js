@@ -83,14 +83,13 @@ const updateScreenTime = async (req,res)=>
         //change to adding with previous value instead of just updating
         ref.child("Users").child(uuid).update({
             "screenTime":screenTime
-        })    
+        });
+        res.send("success");
     }
     catch(e)
     {
         res.send("error");
     }
-    
-
 }
 
 module.exports={
