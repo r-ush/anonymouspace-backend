@@ -77,19 +77,24 @@ const updateScreenTime = (req,res)=>
     try
     {
         const {uuid, screenTime }=req.body;
+        var finalTime;
 
         var data;
 
         ref.child("Users").child(uuid).once("value", function(snapshot)
         {
             data=snapshot.val().screenTime;
-            // console.log(data.screenTime);
-        }).then((lol)=>console.log(lol.val().screenTime));
+        }).then((lol)=>
+        {
+            console.log(lol.val().screenTime);
+            finalTime=lol.val().screenTime+screenTime;
+            console.log(finalTime);
+            ref.child("Users").child(uuid).update({
+                "screenTime":finalTime
+            });
     
-        //change to adding with previous value instead of just updating
-        ref.child("Users").child(uuid).update({
-            "screenTime":screenTime
         });
+
         res.status(200).send("success");
     }
     catch(e)
