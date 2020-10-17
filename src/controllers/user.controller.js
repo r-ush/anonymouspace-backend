@@ -12,28 +12,33 @@ const shortName = uniqueNamesGenerator({
   length: 2,
 });
 
-const sendAllData = async (req, res) => {
+const sendAllData = (req, res) => {
   try {
     ref.once("value", function (snapshot) {
       const data = snapshot.val();
       res.status(200).send(data);
     });
   } catch (e) {
-    res.status(400).send("error");
+    res.status(400).send({ message: false });
   }
 };
 
-const userAccount = async (req, res) => {
-  const { uuid, firstName, location, randomimage } = req.body;
+const userAccount = (req, res) => {
   var chatcount = 0;
   var screenTime = 0;
-  var displayName = shortName;
-
   try {
+    var {
+      uuid = "nouuidgiven",
+      firstName = "namenotgiven",
+      location = "notgiven",
+      randomimage = "urlnotgiven",
+    } = req.body;
+    var displayName = shortName;
+
     ref
       .child("Users")
       .child(uuid)
-      .on("value", function (snapshot) {
+      .once("value", function (snapshot) {
         if (snapshot.exists()) {
           res.status(200).send(snapshot.val());
         } else {
@@ -45,16 +50,22 @@ const userAccount = async (req, res) => {
             displayName,
             randomimage,
           });
+          ref
+            .child("Users")
+            .child(uuid)
+            .once("value", function (snapshot) {
+              res.status(200).send(snapshot.val());
+            });
         }
       });
   } catch (e) {
-    res.status(400).send("error");
+    res.status(400).send({ message: false });
   }
 };
 
-const sendUser = async (req, res) => {
+const sendUser = (req, res) => {
   try {
-    const { uuid } = req.body;
+    const { uuid = "nouidgiven" } = req.body;
     ref
       .child("Users")
       .child(uuid)
@@ -63,21 +74,34 @@ const sendUser = async (req, res) => {
         res.status(200).send(data);
       });
   } catch (e) {
-    res.status(400).send("error");
+    res.status(400).send({ essage: false });
   }
 };
 
-const updateScreenTime = async (req, res) => {
+const updateScreenTime = (req, res) => {
   try {
-    const { uuid, screenTime } = req.body;
+    const { uuid = "nonegiven", screenTime = 0 } = req.body;
+    var finalTime;
 
-    //change to adding with previous value instead of just updating
-    ref.child("Users").child(uuid).update({
-      screenTime: screenTime,
-    });
-    res.status(200).send("success");
+    var data;
+
+    ref
+      .child("Users")
+      .child(uuid)
+      .once("value", function (snapshot) {
+        data = snapshot.val().screenTime;
+      })
+      .then((lol) => {
+        console.log(lol.val().screenTime);
+        finalTime = lol.val().screenTime + screenTime;
+        console.log(finalTime);
+        ref.child("Users").child(uuid).update({
+          screenTime: finalTime,
+        });
+      });
+    res.status(200).send({ message: true });
   } catch (e) {
-    res.status(400).send("error");
+    res.status(400).send({ message: false });
   }
 };
 
