@@ -1,4 +1,3 @@
-const { response } = require("express");
 const { v4: uuidv4 } = require("uuid");
 const { ref } = require("../firebase/firebase.utils");
 
@@ -25,7 +24,12 @@ const createRoom = async (req, res) => {
           res.send(snapshot.val());
         } else {
           ref.child("Chatroom").child(chatroomId).set(chatroom);
-          res.send(ref.child("Chatroom").child(chatroomId));
+          ref
+            .child("Chatroom")
+            .child(chatroomId)
+            .once("value", function (snapshot) {
+              res.send(snapshot.val());
+            });
         }
       });
   } catch (err) {
@@ -87,9 +91,10 @@ const leaveUser = (req, res) => {
       console.log(usersInRoom);
       if (Object.keys(usersInRoom).every((k) => !usersInRoom[k])) {
         // room is empty
+        usersInRoom = Object.keys(usersInRoom);
         console.log("room is empty");
         // add user count -1 to all users in room
-        interactionCount = Object.keys(usersInRoom).length - 1;
+        interactionCount = usersInRoom.length - 1;
         console.log(interactionCount);
       }
     });
