@@ -4,6 +4,7 @@ require("dotenv").config();
 const roomRouter = require("./src/routers/room.router");
 const userRouter = require("./src/routers/user.router");
 const msgRouter = require("./src/routers/msg.router");
+const quoteRouter=require("./src/routers/quotes.router");
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use("/room", roomRouter);
 app.use("/user", userRouter);
 app.use("/msg", msgRouter);
+app.use("/quote",quoteRouter);
 
 app.get("/", (req, res) => {
   res.json({
