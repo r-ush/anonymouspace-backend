@@ -6,7 +6,7 @@ filter = new Filter();
  
 const sendMessage= async (req,res)=>
 {
-    const { msg, chatroomid, uuid }= req.body;
+    const { msg="nomsgsent", chatroomid="nonegiven", uuid="nonegiven" }= req.body;
     var timestamp=Date.now();
 
     try
@@ -31,7 +31,6 @@ const sendMessage= async (req,res)=>
         res.status(400).send({message:false,err});
     }
 };
-
 
 module.exports={
     sendMessage
