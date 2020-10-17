@@ -19,7 +19,8 @@ const sendMessage= async (req,res)=>
         {
             ref.child("Chatroom").child(chatroomid).child("messages").child(timestamp).set({
                 "content":msg,
-                "userid":uuid
+                "userid":uuid,
+                timestamp
             });
         }
     })

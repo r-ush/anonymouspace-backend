@@ -29,7 +29,8 @@ const userAccount=async (req,res)=>
     var firstName=req.body.firstName;
     var location=req.body.location;
     var screenTime=0;
-    var displayName=shortName
+    var displayName=shortName;
+    var randomimage=req.body.randomimage;
 
     ref.child("Users").child(uuid).on("value", function(snapshot)
     {
@@ -40,7 +41,7 @@ const userAccount=async (req,res)=>
         else
         {
             ref.child("Users").child(uuid).set({
-                chatcount,firstName,location,screenTime,displayName
+                chatcount,firstName,location,screenTime,displayName, randomimage
             });
         }
     });
