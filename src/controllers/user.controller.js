@@ -18,7 +18,7 @@ const sendAllData= (req,res)=>{
     }
     catch(e)
     {
-        res.status(400).send("error")        
+        res.status(400).send({message:false});
     }
 }
 
@@ -28,7 +28,7 @@ const userAccount=(req,res)=>
     var screenTime=0;
     try
     {
-        var { uuid, firstName="namenotgiven", location="notgiven", randomimage="urlnotgiven"}=req.body;
+        var { uuid="nouuidgiven", firstName="namenotgiven", location="notgiven", randomimage="urlnotgiven"}=req.body;
         var displayName=shortName;
     
         ref.child("Users").child(uuid).once("value", function(snapshot)
@@ -51,7 +51,7 @@ const userAccount=(req,res)=>
     }
     catch(e)
     {
-        res.status(400).send("error");
+        res.status(400).send({message:false});
     }
 }
 
@@ -59,7 +59,7 @@ const sendUser= (req,res)=>
 {
     try
     {
-        const {uuid="nonegiven"}=req.body;
+        const {uuid="nouidgiven"}=req.body;
         ref.child("Users").child(uuid).on("value", function(snapshot)
         {
             var data=snapshot.val();
@@ -68,7 +68,7 @@ const sendUser= (req,res)=>
     }
     catch(e)
     {
-        res.status(400).send("error");
+        res.status(400).send({essage:false});
     }
 }
 
@@ -93,11 +93,11 @@ const updateScreenTime = (req,res)=>
                 "screenTime":finalTime
             });
         });
-        res.status(200).send("success");
+        res.status(200).send({message:true});
     }
     catch(e)
     {
-        res.status(400).send("error");
+        res.status(400).send({message:false});
     }
 }
 

@@ -28,7 +28,7 @@ const sendMessage= async (req,res)=>
     catch(e)
     {
         console.log(e);
-        res.status(400).send({message:false,err});
+        res.status(400).send({message:false});
     }
 };
 
