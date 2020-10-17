@@ -71,10 +71,17 @@ const sendUser = (req, res) => {
       .child(uuid)
       .on("value", function (snapshot) {
         var data = snapshot.val();
-        res.status(200).send(data);
+        if(data)
+        {
+          res.status(200).send(data);
+        }
+        else
+        {
+          res.send({message:false});
+        }
       });
   } catch (e) {
-    res.status(400).send({ essage: false });
+    res.status(400).send({ message: false });
   }
 };
 
