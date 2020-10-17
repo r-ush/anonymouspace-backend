@@ -7,7 +7,6 @@ router.get("/test", (req, res) => {
   res.json({ message: true });
 });
 
-//testing
 router.get("/alldata",sendAllData);
 router.post("/useraccount",userAccount);
 router.post("/getuser",sendUser);

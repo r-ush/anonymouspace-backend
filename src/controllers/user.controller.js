@@ -13,12 +13,12 @@ const sendAllData= async (req,res)=>{
     {
         ref.once("value", function(snapshot) {
             const data = snapshot.val();
-            res.send(data);
+            res.status(200).send(data);
         })    
     }
     catch(e)
     {
-        res.send("error")        
+        res.status(400).send("error")        
     }
 }
 
@@ -35,7 +35,7 @@ const userAccount=async (req,res)=>
         {
             if (snapshot.exists())
             {
-                res.send(snapshot.val());
+                res.status(200).send(snapshot.val());
             }
             else
             {
@@ -48,7 +48,7 @@ const userAccount=async (req,res)=>
     }
     catch(e)
     {
-        res.send("error");
+        res.status(400).send("error");
     }
 
 }
@@ -61,12 +61,12 @@ const sendUser= async (req,res)=>
         ref.child("Users").child(uuid).on("value", function(snapshot)
         {
             var data=snapshot.val();
-            res.send(data);
+            res.status(200).send(data);
         });            
     }
     catch(e)
     {
-        res.send("error");
+        res.status(400).send("error");
     }
 }
 
@@ -80,11 +80,11 @@ const updateScreenTime = async (req,res)=>
         ref.child("Users").child(uuid).update({
             "screenTime":screenTime
         });
-        res.send("success");
+        res.status(200).send("success");
     }
     catch(e)
     {
-        res.send("error");
+        res.status(400).send("error");
     }
 }
 

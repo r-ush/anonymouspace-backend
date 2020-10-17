@@ -21,13 +21,13 @@ const sendMessage= async (req,res)=>
                     "userid":uuid,
                     timestamp
                 });
-                res.send({message:true});
+                res.status(200).send({message:true});
             }
         })    
     }
     catch(e)
     {
-        res.send("error");
+        res.status(400).send("error");
     }
 }
 
