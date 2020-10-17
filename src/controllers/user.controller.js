@@ -1,11 +1,19 @@
 const express=require('express')
 const {ref}=require("../firebase/firebase.utils");
 
+const { uniqueNamesGenerator, colors, animals } = require('unique-names-generator');
+ 
+const shortName = uniqueNamesGenerator({
+  dictionaries: [ colors, animals],
+  length: 2
+});
+
 const sendAllData= async (req,res)=>{
-    ref.once("value", function(snapshot) {
-        var data = snapshot.val();   //Data is in JSON format.
+    ref.
+    once("value", function(snapshot) {
+        const data = snapshot.val();
         res.send(data);
-    });
+    })
 }
 
 const userAccount=async (req,res)=>
@@ -15,7 +23,7 @@ const userAccount=async (req,res)=>
     var firstName=req.body.firstName;
     var location=req.body.location;
     var screenTime=0;
-    var displayName="anonymous lmao"//use random generator
+    var displayName=shortName
 
     ref.child("Users").child(uuid).on("value", function(snapshot)
     {
@@ -28,7 +36,6 @@ const userAccount=async (req,res)=>
             ref.child("Users").child(uuid).set({
                 chatcount,firstName,location,screenTime,displayName
             });
-            res.send(ref.child("Users").child(uuid));
         }
     });
 }
