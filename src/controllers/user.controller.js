@@ -86,9 +86,10 @@ const sendUser = (req, res) => {
 };
 
 const updateScreenTime = (req, res) => {
-  try {
+  try
+  {
     const { uuid = "nonegiven", screenTime = 0 } = req.body;
-    var finalTime;
+    var finalTime=screenTime;
 
     var data;
 
@@ -98,15 +99,17 @@ const updateScreenTime = (req, res) => {
       .once("value", function (snapshot) {
         data = snapshot.val().screenTime;
       })
-      .then((lol) => {
-        finalTime = lol.val().screenTime + screenTime;
-        console.log(finalTime);
+      .then((time) => {
+        finalTime = time.val().screenTime + screenTime;
+      });
         ref.child("Users").child(uuid).update({
           screenTime: finalTime,
-        });
-      });
-    res.status(200).send({ message: true });
-  } catch (e) {
+        },()=>{
+          res.send({msg:true});
+        })
+      }
+      catch (e) {
+        console.log(e);
     res.status(400).send({ message: false });
   }
 };
