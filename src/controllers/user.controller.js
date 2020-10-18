@@ -31,9 +31,9 @@ const userAccount = (req, res) => {
       uuid = "nouuidgiven",
       firstName = "namenotgiven",
       location = "notgiven",
-      randomimage = "urlnotgiven"
     } = req.body;
     var displayName = shortName;
+    var image = "https://picsum.photos/200"
 
     ref
       .child("Users")
@@ -48,7 +48,7 @@ const userAccount = (req, res) => {
             location,
             screenTime,
             displayName,
-            randomimage,
+            image,
           });
           ref
             .child("Users")
