@@ -20,23 +20,25 @@ const sendMessage= async (req,res)=>
 
         ref.child("Users").child(uuid).once("value", function (snapshotuser)
         {
-            // console.log(snapshotuser.val());
             ref.child("Chatroom").child(chatroomid).once("value", function(snapshotchat)
             {
                 if (snapshotchat.exists())
                 {
-                    console.log(snapshotuser.val());
                     var data=snapshotchat.val();
                     ref.child("Chatroom").child(chatroomid).child("messages").child(timestamp).update({
                         "content":encrypedmsg,
                         "userid":uuid,
-                        timestamp
+                        timestamp,
+                        "image":snapshotuser.val().image
                     });
-                    res.status(200).send({user:snapshotuser.val(),message:true});
+                    res.status(200).send({message:true});
+                }
+                else
+                {
+                    res.status({message:false});
                 }
             })
         });
-
     }
     catch(e)
     {
