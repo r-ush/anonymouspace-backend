@@ -31,7 +31,7 @@ const userAccount = (req, res) => {
       uuid = "nouuidgiven",
       firstName = "namenotgiven",
       location = "notgiven",
-      randomimage = "urlnotgiven"
+      randomimage = "urlnotgiven",
     } = req.body;
     var displayName = shortName;
 
@@ -71,13 +71,10 @@ const sendUser = (req, res) => {
       .child(uuid)
       .on("value", function (snapshot) {
         var data = snapshot.val();
-        if(data)
-        {
+        if (data) {
           res.status(200).send(data);
-        }
-        else
-        {
-          res.send({message:false});
+        } else {
+          res.send({ message: false });
         }
       });
   } catch (e) {
@@ -86,10 +83,9 @@ const sendUser = (req, res) => {
 };
 
 const updateScreenTime = (req, res) => {
-  try
-  {
+  try {
     const { uuid = "nonegiven", screenTime = 0 } = req.body;
-    var finalTime=screenTime;
+    var finalTime = screenTime;
 
     var data;
 
@@ -102,14 +98,19 @@ const updateScreenTime = (req, res) => {
       .then((time) => {
         finalTime = time.val().screenTime + screenTime;
       });
-        ref.child("Users").child(uuid).update({
+    ref
+      .child("Users")
+      .child(uuid)
+      .update(
+        {
           screenTime: finalTime,
-        },()=>{
-          res.send({msg:true});
-        })
-      }
-      catch (e) {
-        console.log(e);
+        },
+        () => {
+          res.send({ message: true });
+        }
+      );
+  } catch (e) {
+    console.log(e);
     res.status(400).send({ message: false });
   }
 };
