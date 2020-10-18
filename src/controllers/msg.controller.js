@@ -10,9 +10,7 @@ const sendMessage= async (req,res)=>
     const { 
         msg="nomsgsent",
         chatroomid="nonegiven",
-        uuid="nonegiven",
-        displayName="nonegiven"
-
+        uuid="nonegiven"
     }= req.body;
     var timestamp=Date.now();
     try
@@ -20,19 +18,25 @@ const sendMessage= async (req,res)=>
         var filteredmsg=filter.clean(msg);
         var encrypedmsg=rot(filteredmsg, process.env.rotkey);
 
-        ref.child("Chatroom").child(chatroomid).once("value", function(snapshot)
+        ref.child("Users").child(uuid).once("value", function (snapshotuser)
         {
-            if (snapshot.exists())
+            // console.log(snapshotuser.val());
+            ref.child("Chatroom").child(chatroomid).once("value", function(snapshotchat)
             {
-                ref.child("Chatroom").child(chatroomid).child("messages").child(timestamp).update({
-                    "content":encrypedmsg,
-                    "userid":uuid,
-                    "displayname":displayName,
-                    timestamp
-                });
-                res.status(200).send({message:true});
-            }
-        })    
+                if (snapshotchat.exists())
+                {
+                    console.log(snapshotuser.val());
+                    var data=snapshotchat.val();
+                    ref.child("Chatroom").child(chatroomid).child("messages").child(timestamp).update({
+                        "content":encrypedmsg,
+                        "userid":uuid,
+                        timestamp
+                    });
+                    res.status(200).send({user:snapshotuser.val(),message:true});
+                }
+            })
+        });
+
     }
     catch(e)
     {
